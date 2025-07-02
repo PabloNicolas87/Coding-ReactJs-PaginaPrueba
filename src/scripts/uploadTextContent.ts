@@ -4,12 +4,12 @@ import { getFirestore, collection, setDoc, doc } from "firebase/firestore";
 
 // 🔐 Usá tus propios datos acá:
 const firebaseConfig = {
-  apiKey: "AIzaSyD680P8vm3I-xirQ5Ylz5Aj2kF0r7TEtiw",
-  authDomain: "paginaprueba-3ad6a.firebaseapp.com",
-  projectId: "paginaprueba-3ad6a",
-  storageBucket: "paginaprueba-3ad6a.firebasestorage.app",
-  messagingSenderId: "235853664271",
-  appId: "1:235853664271:web:7dd6097a2ac16c250c937a"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
