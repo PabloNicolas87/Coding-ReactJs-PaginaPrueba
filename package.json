@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "upload:texts": "tsx src/scripts/uploadTextContent.ts"
+    "upload:texts": "tsx src/scripts/uploadTextContent.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
