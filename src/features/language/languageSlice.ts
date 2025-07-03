@@ -4,6 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   value: "es", // idioma por defecto
+  isLoading: false,
 };
 
 const languageSlice = createSlice({
@@ -13,8 +14,12 @@ const languageSlice = createSlice({
     setLanguage: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
+    setLanguageLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { setLanguage } = languageSlice.actions;
+export const { setLanguage, setLanguageLoading } = languageSlice.actions;
+
 export default languageSlice.reducer;

@@ -1,56 +1,89 @@
-// src/scripts/uploadTextContent.ts
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, setDoc, doc } from "firebase/firestore";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // 🔐 Usá tus propios datos acá:
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: process.env.VITE_FIREBASE_API_KEY!,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.VITE_FIREBASE_APP_ID!,
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const data = [
-  {
-    id: "home_es",
-    section: "home",
-    language: "es",
-    content: {
-      title: "Hola!",
-      description: "Soy Pablo",
+// Traducciones unificadas por idioma
+const translations = {
+  es: {
+    home: {
+      title: "¡Hola!",
+      description: "Soy Pablo"
     },
+    theme: {
+      light: "Claro",
+      dark: "Oscuro"
+    },
+    language: {
+      label: "Idioma"
+    },
+    languageOptions: {
+      es: "Español",
+      en: "Inglés",
+      pt: "Portugués"
+    }
   },
-  {
-    id: "home_en",
-    section: "home",
-    language: "en",
-    content: {
+  en: {
+    home: {
       title: "Hello!",
-      description: "I'm Pablo",
+      description: "I'm Pablo"
     },
+    theme: {
+      light: "Light",
+      dark: "Dark"
+    },
+    language: {
+      label: "Language"
+    },
+    languageOptions: {
+      es: "Spanish",
+      en: "English",
+      pt: "Portuguese"
+    }
   },
-  {
-    id: "home_pt",
-    section: "home",
-    language: "pt",
-    content: {
+  pt: {
+    home: {
       title: "Olá!",
-      description: "Sou o Pablo",
+      description: "Sou o Pablo"
     },
-  },
-];
-
-const upload = async () => {
-  const colRef = collection(db, "textContent");
-  for (const item of data) {
-    await setDoc(doc(colRef, item.id), item);
-    console.log(`✅ Documento ${item.id} subido`);
+    theme: {
+      light: "Claro",
+      dark: "Escuro"
+    },
+    language: {
+      label: "Idioma"
+    },
+    languageOptions: {
+      es: "Espanhol",
+      en: "Inglês",
+      pt: "Português"
+    }
   }
 };
 
-upload();
+async function uploadLanguagesNested() {
+  for (const [lang, data] of Object.entries(translations)) {
+    const ref = doc(db, "languages", lang);
+    console.log(`🟡 Subiendo traducciones para ${lang}...`);
+    await setDoc(ref, data);
+    console.log(`✅ ${lang} subido correctamente`);
+  }
+}
+
+uploadLanguagesNested()
+  .then(() => console.log("🎉 Todos los idiomas fueron subidos a Firestore"))
+  .catch((err) => console.error("❌ Error subiendo idiomas", err));

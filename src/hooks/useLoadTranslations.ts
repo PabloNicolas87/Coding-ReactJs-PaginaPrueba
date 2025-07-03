@@ -1,16 +1,25 @@
 import { useEffect } from "react";
-import { getTextContent } from "../services/firebase";
+import { db } from "../services/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import i18n from "../i18n";
+import { useDispatch } from "react-redux";
+import { setLanguageLoading } from "../features/language/languageSlice";
 
 export const useLoadTranslations = (lang: string) => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getTextContent(lang);
-      console.log("✅ Traducciones cargadas desde Firebase:", data);
-      i18n.addResourceBundle(lang, 'translation', data, true, true);
-      console.log("🌐 Idioma actual de i18n:", i18n.language);
-      i18n.changeLanguage(lang);
+    const fetchTranslations = async () => {
+      dispatch(setLanguageLoading(true));
+      const docRef = doc(db, "languages", lang);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        i18n.addResourceBundle(lang, "translation", data, true, true);
+        i18n.changeLanguage(lang);
+      }
+      dispatch(setLanguageLoading(false));
     };
-    fetchData();
+    fetchTranslations();
   }, [lang]);
 };
