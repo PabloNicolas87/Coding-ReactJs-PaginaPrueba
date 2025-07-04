@@ -12,26 +12,30 @@ export const SectionsNavigator = () => {
   const isLoading = useSelector((state: RootState) => state.language.isLoading);
   const sections = useLoadSections(lang);
 
-  // Skeletons para loading
-  const skeletons = Array.from({ length: 3 }).map((_, i) => (
-    <Skeleton key={i} width={90} height={24} borderRadius={6} />
-  ));
+  const renderLinks = (className: string, onClick?: () => void) =>
+    sections.map(({ slug, label }) => (
+      <a
+        key={slug}
+        href={`#${slug}`}
+        className={className}
+        onClick={onClick}
+      >
+        {label}
+      </a>
+    ));
+
+  const renderSkeletons = (className: string) =>
+    Array.from({ length: 3 }).map((_, i) => (
+      <Skeleton key={i} width={80} height={24} borderRadius={6} className={className} />
+    ));
 
   return (
     <div className="relative">
       {/* Desktop: menú horizontal */}
       <nav className="hidden md:flex gap-4 items-center">
         {isLoading
-          ? skeletons
-          : sections.map(({ slug, label }) => (
-              <a
-                key={slug}
-                href={`#${slug}`}
-                className="flex items-center justify-center h-6 px-2 text-center hover:underline"
-              >
-                {label}
-              </a>
-            ))}
+          ? renderSkeletons("")
+          : renderLinks("flex items-center justify-center h-6 px-2 text-center")}
       </nav>
 
       {/* Tablet/Mobile: menú hamburguesa */}
@@ -43,22 +47,12 @@ export const SectionsNavigator = () => {
         >
           <Menu className="w-6 h-6" />
         </button>
-        {/* Overlay y menú desplegable */}
         {open && (
           <div className="absolute right-0 top-10 mt-2 w-48 bg-white dark:bg-gray-800 rounded shadow-lg z-50">
             <nav className="flex flex-col gap-2 p-4">
               {isLoading
-                ? skeletons
-                : sections.map(({ slug, label }) => (
-                    <a
-                      key={slug}
-                      href={`#${slug}`}
-                      className="py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => setOpen(false)}
-                    >
-                      {label}
-                    </a>
-                  ))}
+                ? renderSkeletons("")
+                : renderLinks("py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700", () => setOpen(false))}
             </nav>
           </div>
         )}
