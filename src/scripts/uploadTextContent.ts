@@ -35,7 +35,12 @@ const translations = {
       es: "Español",
       en: "Inglés",
       pt: "Portugués"
-    }
+    },
+    sections: [
+      { slug: "about", label: "Sobre mí" },
+      { slug: "projects", label: "Mis Proyectos" },
+      { slug: "contact", label: "Contáctame" }
+    ]
   },
   en: {
     home: {
@@ -53,7 +58,12 @@ const translations = {
       es: "Spanish",
       en: "English",
       pt: "Portuguese"
-    }
+    },
+    sections: [
+      { slug: "about", label: "About Me" },
+      { slug: "projects", label: "My Projects" },
+      { slug: "contact", label: "Contact Me" }
+    ]
   },
   pt: {
     home: {
@@ -71,7 +81,12 @@ const translations = {
       es: "Espanhol",
       en: "Inglês",
       pt: "Português"
-    }
+    },
+    sections: [
+      { slug: "about", label: "Sobre mim" },
+      { slug: "projects", label: "Meus Projetos" },
+      { slug: "contact", label: "Contate-me" }
+    ]
   }
 };
 
@@ -79,7 +94,7 @@ async function uploadLanguagesNested() {
   for (const [lang, data] of Object.entries(translations)) {
     const ref = doc(db, "languages", lang);
     console.log(`🟡 Subiendo traducciones para ${lang}...`);
-    await setDoc(ref, data);
+    await setDoc(ref, data, { merge: true });
     console.log(`✅ ${lang} subido correctamente`);
   }
 }

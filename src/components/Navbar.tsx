@@ -1,5 +1,6 @@
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
+import { SectionsNavigator } from "./SectionsNavigator";
 
 export const Navbar = () => {
   return (
@@ -8,9 +9,18 @@ export const Navbar = () => {
         🌐 Mi Portafolio
       </h1>
 
-      <div className="flex gap-4">
+      {/* Desktop: menú de secciones a la izquierda */}
+      <div className="hidden md:flex gap-4 items-center">
+        <SectionsNavigator />
         <LanguageSwitcher />
         <ThemeToggle />
+      </div>
+
+      {/* Mobile/Tablet: menú hamburguesa a la derecha */}
+      <div className="flex md:hidden gap-4 items-center">
+        <LanguageSwitcher />
+        <ThemeToggle />
+        <SectionsNavigator />
       </div>
     </nav>
   );
